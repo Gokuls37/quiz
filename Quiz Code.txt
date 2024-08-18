@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <style>
+    h1 {
+      color: darkblue;
+      font-weight: bold;
+      text-align: center; /* Center the title */
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .quiz-container {
+  width: 90%; /* Slightly increase width */
+  max-width: 600px; /* Increase max-width slightly */
+  margin: 20px auto;
+  padding: 20px; /* Increase padding */
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  min-height: 400px; /* Set minimum height */
+}
+    .slide {
+      display: none;
+    }
+    .slide.active {
+      display: block;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .question h3 {
+      margin: 0;
+      font-size: 1.3em;
+      color: black;
+      font-weight: bold;
+    }
+    .question h3 {
+  margin-bottom: 30px; /* Increase this value to add more space */
+}
+
+.options {
+  list-style-type: none;
+  padding: 0; /* Remove padding around the list */
+  margin: 0; /* Remove margin around the list */
+  color: black;
+}
+
+.options li {
+  padding: 10px; /* Add padding inside each option box */
+  margin-bottom: 10px; /* Add gap between options */
+  border: 1px solid #ccc; /* Add a border around each option */
+  border-radius: 5px; /* Optional: round the corners */
+  /*background-color: #f9f9f9; /* Optional: add a background color */
+  font-size: 1.3em; /* Enlarge text size */
+}
+   .options li .option-wrapper {
+   display: block;
+  padding: 10px; /* Add padding for better clickable area */
+  /*border: 1px solid #ccc; /* Add border for better visual separation */
+  border-radius: 5px; /* Optional: round the corners */
+  cursor: pointer;
+}
+.options li .option-wrapper:hover {
+  background-color: transparent; /* Change background color on hover for visual feedback */
+}
+
+    .options input[type="radio"] {
+      transform: scale(2);
+      margin-right: 10px;
+    }
+   
+   .chosen-radio {
+        appearance: none;
+        width: 16px;  /* Adjusted size */
+        height: 16px; /* Adjusted size */
+        border: 1px solid black;
+        border-radius: 50%;
+        display: inline-block;
+        position: relative;
+        margin-right: 5px; /* Ensure there's a gap between the radio button and the label */
+    }
+    .chosen-radio::after {
+        content: '';
+        width: 8px;  /* Adjusted size */
+        height: 8px; /* Adjusted size */
+        background-color: black;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* Center the black dot */
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.2em;
+      margin-top: 10px;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+   .btn-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+     background: #f9f9f9;
+   }
+    .result {
+      display: none;
+      text-align: center;
+      font-size: 1.5em;
+      margin-top: 20px;
+    }
+    .score-popup {
+  display: none;
+  position: absolute; /* Change position to absolute */
+  top: 20px; /* Position from the top */
+  right: 10px; /* Position from the right */
+  width: 90%;
+  max-width: 300px;
+  padding: 20px;
+  border: 2px solid #007BFF;
+  border-radius: 15px;
+  background-color: #fff;
+  text-align: center;
+}
+    .score-popup h2 {
+      color: black;
+      margin-top: 0;
+    }
+    .score-popup .question-number {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      line-height: 30px;
+      border-radius: 50%;
+      margin: 10px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1.2em;
+    }
+    .score-popup .question-number.correct {
+      background-color: green;
+    }
+    .score-popup .question-number.wrong {
+      background-color: red;
+    }
+    .score-popup .question-number.skipped {
+      background-color: grey;
+    }
+    .score-details {
+      margin-top: 10px;
+    }
+    .score-details div {
+      margin-bottom: 5px;
+    }
+</style>
+
+</head>
+<body>
+  <h1>CHEMISTRY QUIZ</h1> <!-- Title placed outside of the quiz container -->
+  <div class="quiz-container">
+        
+     <div class="slide active" id="slide1">
+      <div class="question">
+        <h3>1. What is the chemical symbol for sodium bicarbonate?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q1" value="Sb"> Sb</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q1" value="NaHCO3"> NaHCO3</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q1" value="Nab"> Nab</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q1" value="Na2CO3"> Na2CO3</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+    
+    <div class="slide" id="slide2">
+  <div class="question">
+    <h3>2. What is the chemical symbol for sodium?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q2" value="Sd"> Sd</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q2" value="Na"> Na</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q2" value="So"> So</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q2" value="Ns"> Ns</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+
+<div class="slide" id="slide3">
+  <div class="question">
+    <h3>3. Which metal is used as a catalyst in the hydrogenation of oils?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q3" value="Iron"> Iron</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q3" value="Silver"> Silver</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q3" value="Platinum"> Platinum</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q3" value="Copper"> Copper</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+
+  <div class="slide" id="slide4">
+  <div class="question">
+    <h3>4. What is the chemical formula for sulfuric acid?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q4" value="H2SO3"> H2SO3</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q4" value="H2SO4"> H2SO4</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q4" value="HCl"> HCl</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q4" value="NaOH"> NaOH</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+
+<div class="slide" id="slide5">
+  <div class="question">
+    <h3>5. Which gas is produced during the process of photosynthesis?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q5" value="Oxygen"> Oxygen</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q5" value="Carbon dioxide"> Carbon dioxide</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q5" value="Nitrogen"> Nitrogen</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q5" value="Hydrogen"> Hydrogen</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+
+    <div class="slide" id="slide6">
+  <div class="question">
+    <h3>6. What is the main component of natural gas?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q6" value="Methane"> Methane</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q6" value="Ethane"> Ethane</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q6" value="Propane"> Propane</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q6" value="Butane"> Butane</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+
+<div class="slide" id="slide7">
+  <div class="question">
+    <h3>7. Which element has the highest electronegativity?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q7" value="Fluorine"> Fluorine</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q7" value="Oxygen"> Oxygen</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q7" value="Chlorine"> Chlorine</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q7" value="Nitrogen"> Nitrogen</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+
+    <div class="slide" id="slide8">
+  <div class="question">
+    <h3>8. What is the chemical formula for table salt?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q8" value="NaCl"> NaCl</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q8" value="HCl"> HCl</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q8" value="NaOH"> NaOH</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q8" value="H2SO4"> H2SO4</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+
+<!-- Question 9 -->
+<div class="slide" id="slide9">
+  <div class="question">
+    <h3>9. Which of the following is a non-metal?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q9" value="Sodium"> Sodium</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q9" value="Calcium"> Calcium</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q9" value="Phosphorus"> Phosphorus</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q9" value="Magnesium"> Magnesium</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+
+    <div class="slide" id="slide10">
+  <div class="question">
+    <h3>10. What is the chemical formula for acetic acid, commonly found in vinegar?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q10" value="CH4"> CH4</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q10" value="H2O"> H2O</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q10" value="CO2"> CO2</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q10" value="CH3COOH"> CH3COOH</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+
+<div class="slide" id="slide11">
+  <div class="question">
+    <h3>11. What is the chemical formula for calcium carbonate, commonly found in limestone?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q11" value="CaCO2"> CaCO2</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q11" value="CaCO3"> CaCO3</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q11" value="CaO"> CaO</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q11" value="Ca(OH)2"> Ca(OH)2</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+
+<div class="slide" id="slide12">
+  <div class="question">
+    <h3>12. What is essential for the formation of organic compounds?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q12" value="Nitrogen"> Nitrogen</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q12" value="Carbon"> Carbon</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q12" value="Oxygen"> Oxygen</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q12" value="Hydrogen"> Hydrogen</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+    <div class="slide" id="slide13">
+  <div class="question">
+    <h3>13. What is the chemical formula for hydrogen peroxide?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q13" value="H2O"> H2O</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q13" value="H2O2"> H2O2</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q13" value="HO"> HO</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q13" value="H2O3"> H2O3</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+
+<!-- Question 14 -->
+<div class="slide" id="slide14">
+  <div class="question">
+    <h3>14. Which gas gives vinegar its sour taste?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q14" value="Carbon dioxide"> Carbon dioxide</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q14" value="Oxygen"> Oxygen</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q14" value="Nitrogen"> Nitrogen</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q14" value="Hydrogen sulfide"> Hydrogen sulfide</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+
+<!-- Question 15 -->
+<div class="slide" id="slide15">
+  <div class="question">
+    <h3>15. What is the chemical formula for ammonia?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q15" value="NH4"> NH4</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q15" value="NH2"> NH2</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q15" value="NH3"> NH3</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q15" value="NH"> NH</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+    <!-- Question 16 -->
+<div class="slide" id="slide16">
+  <div class="question">
+    <h3>16. Which of the following is an example of a halogen?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q16" value="Sodium"> Sodium</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q16" value="Chlorine"> Chlorine</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q16" value="Calcium"> Calcium</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q16" value="Potassium"> Potassium</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+
+<!-- Question 17 -->
+<div class="slide" id="slide17">
+  <div class="question">
+    <h3>17. What is the chemical formula for hydrogen sulfide?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q17" value="H2SO3"> H2SO3</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q17" value="H2SO4"> H2SO4</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q17" value="H2S"> H2S</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q17" value="HS"> HS</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+
+<!-- Question 18 -->
+<div class="slide" id="slide18">
+  <div class="question">
+    <h3>18. Which gas is known as laughing gas?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q18" value="Carbon dioxide"> Carbon dioxide</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q18" value="Nitrous oxide"> Nitrous oxide</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q18" value="Nitric oxide"> Nitric oxide</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q18" value="Carbon monoxide"> Carbon monoxide</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+
+<!-- Question 19 -->
+<div class="slide" id="slide19">
+  <div class="question">
+    <h3>19. What is the chemical formula for glucose?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q19" value="C6H12O6"> C6H12O6</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q19" value="CO2"> CO2</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q19" value="CH4"> CH4</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q19" value="H2O"> H2O</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="nextSlide()">Next</button>
+  </div>
+</div>
+
+<!-- Question 20 -->
+<div class="slide" id="slide20">
+  <div class="question">
+    <h3>20. Which element is the main component of the Earth's atmosphere?</h3>
+    <ul class="options">
+      <li><label class="option-wrapper"><input type="radio" name="q20" value="Oxygen"> Oxygen</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q20" value="Carbon"> Carbon</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q20" value="Nitrogen"> Nitrogen</label></li>
+      <li><label class="option-wrapper"><input type="radio" name="q20" value="Hydrogen"> Hydrogen</label></li>
+    </ul>
+  </div>
+  <div class="btn-container">
+    <button class="btn" onclick="prevSlide()">Previous</button>
+    <button class="btn" onclick="checkAnswers()">Submit</button>
+  </div>
+</div>
+
+    <div class="result" id="result"></div>
+  </div>
+  
+  <div class="score-popup" id="score-popup">
+    <h2>Your Score</h2>
+    <div id="score"></div>
+    <div id="details"></div>
+    <div class="score-details">
+      <div id="total-questions"></div>
+      <div id="correct-answers"></div>
+      <div id="wrong-answers"></div>
+      <div id="skipped-questions"></div>
+    </div>
+    <button class="btn" onclick="checkAnswersDetails()">Check Answers</button>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+const slides = document.querySelectorAll('.slide');
+const userAnswers = {};
+const answeredQuestions = {}; // New line to keep track of answered questions
+
+function nextSlide() {
+  slides[currentSlide].classList.remove('active');
+  currentSlide++;
+  if (currentSlide >= slides.length) {
+    currentSlide = slides.length - 1;
+  }
+  slides[currentSlide].classList.add('active');
+}
+
+function prevSlide() {
+  if (currentSlide > 0) {
+    slides[currentSlide].classList.remove('active');
+    currentSlide--;
+    slides[currentSlide].classList.add('active');
+  }
+}
+
+function checkAnswers() {
+  const correctAnswers = {
+   q1: 'Sb',
+  q2: 'Na',
+  q3: 'Platinum',
+  q4: 'H2SO4',
+  q5: 'Oxygen',
+  q6: 'Methane',
+  q7: 'Fluorine',
+  q8: 'NaOH',
+  q9: 'Phosphorus',
+  q10: 'CH3COOH',
+  q11: 'CaCO3',
+  q12: 'Carbon',
+  q13: 'H2O2',
+  q14: 'Hydrogen sulfide',
+  q15: 'NH3',
+  q16: 'Chlorine',
+  q17: 'H2S',
+  q18: 'Nitrous oxide',
+  q19: 'C6H12O6',
+  q20: 'Nitrogen'
+};
+
+  let correctCount = 0;
+  let wrongCount = 0;
+  let skippedCount = 0;
+  let details = '';
+
+  for (let i = 1; i <= Object.keys(correctAnswers).length; i++) {
+    const question = 'q' + i;
+    const selectedOption = document.querySelector('input[name="' + question + '"]:checked');
+    if (selectedOption) {
+      userAnswers[question] = selectedOption.value;
+      answeredQuestions[question] = true; // Mark the question as answered
+      if (selectedOption.value === correctAnswers[question]) {
+        correctCount++;
+        details += '<div class="question-number correct" onclick="goToQuestion(' + i + ')">' + i + '</div>';
+      } else {
+        wrongCount++;
+        details += '<div class="question-number wrong" onclick="goToQuestion(' + i + ')">' + i + '</div>';
+      }
+    } else {
+      skippedCount++;
+      userAnswers[question] = null;
+      details += '<div class="question-number skipped" onclick="goToQuestion(' + i + ')">' + i + '</div>';
+    }
+  }
+
+  const resultDiv = document.getElementById('result');
+  resultDiv.innerHTML = "<span style='color: #F901D0; font-weight: bold; font-size: 1em;'>You scored " + correctCount + " out of " + Object.keys(correctAnswers).length + "!</span>";
+  resultDiv.style.display = "block";
+
+  const scorePopup = document.getElementById('score-popup');
+  scorePopup.querySelector('#score').innerHTML = "<span style='color: #1508D8; font-weight: bold; font-size: 1.5em;'>You scored " + correctCount + " out of " + Object.keys(correctAnswers).length + "!</span>";
+  scorePopup.querySelector('#details').innerHTML = details;
+  scorePopup.querySelector('#total-questions').innerHTML ="<span style='color: black; font-weight: bold;'>Total Questions: " + Object.keys(correctAnswers).length + "</span>";
+  scorePopup.querySelector('#correct-answers').innerHTML ="<span style='color: black; font-weight: bold;'>Correct: " + correctCount + "</span>";
+  scorePopup.querySelector('#wrong-answers').innerHTML ="<span style='color: black; font-weight: bold;'>Wrong: " + wrongCount + "</span>";
+  scorePopup.querySelector('#skipped-questions').innerHTML ="<span style='color: black; font-weight: bold;'>Skipped: " + skippedCount + "</span>";
+  scorePopup.style.display = "block";
+
+  // Disable radio buttons after submitting
+  disableRadioButtons();
+}
+
+function disableRadioButtons() {
+    const radioButtons = document.querySelectorAll('input[type="radio"]');
+    radioButtons.forEach(radio => {
+        if (radio.checked) {
+            radio.classList.add('chosen-radio');
+        }
+        radio.disabled = true;
+    });
+}
+
+function goToQuestion(questionNumber) {
+  slides[currentSlide].classList.remove('active');
+  currentSlide = questionNumber - 1;
+  slides[currentSlide].classList.add('active');
+  highlightAnswers(questionNumber);
+}
+
+function highlightAnswers(questionNumber) {
+  const correctAnswers = {
+     q1: 'Sb',
+  q2: 'Na',
+  q3: 'Platinum',
+  q4: 'H2SO4',
+  q5: 'Oxygen',
+  q6: 'Methane',
+  q7: 'Fluorine',
+  q8: 'NaOH',
+  q9: 'Phosphorus',
+  q10: 'CH3COOH',
+  q11: 'CaCO3',
+  q12: 'Carbon',
+  q13: 'H2O2',
+  q14: 'Hydrogen sulfide',
+  q15: 'NH3',
+  q16: 'Chlorine',
+  q17: 'H2S',
+  q18: 'Nitrous oxide',
+  q19: 'C6H12O6',
+  q20: 'Nitrogen'
+};
+
+  const question = 'q' + questionNumber;
+  const correctAnswer = correctAnswers[question];
+  const userAnswer = userAnswers[question];
+
+  const options = document.querySelectorAll('input[name="' + question + '"]');
+  options.forEach(option => {
+    const label = option.parentElement;
+    label.style.color = 'black';
+    label.style.backgroundColor = 'transparent';
+    if (option.value === correctAnswer) {
+      label.style.backgroundColor = 'green';
+      label.style.color = 'white';
+    } 
+    if (userAnswer && option.value === userAnswer && userAnswer !== correctAnswer) {
+      label.style.backgroundColor = 'red';
+      label.style.color = 'white';
+    }
+    if (option.checked) {
+      option.classList.add('chosen-radio');
+    }
+  });
+
+  // Add status indicator
+  const statusIndicator = document.createElement('span');
+  statusIndicator.style.position = 'absolute';
+  statusIndicator.style.top = '10px';
+  statusIndicator.style.right = '10px';
+  statusIndicator.style.fontSize = '1em';
+  statusIndicator.style.fontWeight = 'bold';
+
+  if (userAnswer === correctAnswer) {
+    statusIndicator.textContent = 'Correct';
+    statusIndicator.style.color = 'green';
+  } else if (userAnswer === null) {
+    statusIndicator.textContent = 'Skipped';
+    statusIndicator.style.color = 'grey';
+  } else {
+    statusIndicator.textContent = 'Incorrect';
+    statusIndicator.style.color = 'red';
+  }
+
+  const slide = document.getElementById('slide' + questionNumber);
+  slide.appendChild(statusIndicator);
+}
+
+function checkAnswersDetails() {
+  const scorePopup = document.getElementById('score-popup');
+  scorePopup.style.display = 'none';
+  goToQuestion(1); // Start highlighting answers from the first question
+  for (let i = 1; i <= Object.keys(userAnswers).length; i++) {
+    highlightAnswers(i);
+  }
+}
+    document.addEventListener('DOMContentLoaded', function () {
+    const selectedOptions = {}; // Object to store selected options for each question
+
+    const radioButtons = document.querySelectorAll('input[type="radio"]');
+    radioButtons.forEach(radio => {
+        radio.addEventListener('click', function () {
+            const question = this.getAttribute('name');
+            if (this === selectedOptions[question]) {
+                this.checked = false; // Toggle checked state
+                delete selectedOptions[question]; // Remove selected option
+            } else {
+                selectedOptions[question] = this; // Store selected option for this question
+            }
+        });
+    });
+
+    // Function to restore selected option for a question
+    function restoreSelectedOption(question) {
+        const selectedOption = selectedOptions[question];
+        if (selectedOption) {
+            selectedOption.checked = true;
+        }
+    }
+
+    // Event listener for slide change
+    const slides = document.querySelectorAll('.slide');
+    slides.forEach(slide => {
+        slide.addEventListener('click', function () {
+            const currentQuestion = this.querySelector('input[type="radio"]').getAttribute('name');
+            // Restore selected option for the current question
+            restoreSelectedOption(currentQuestion);
+        });
+    });
+});
+
+  </script>
+</body>
+</html>
